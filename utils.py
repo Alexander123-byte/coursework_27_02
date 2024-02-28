@@ -1,5 +1,6 @@
 import psycopg2
 import requests
+import os
 
 
 def get_vacancies(employer_id):
@@ -55,8 +56,10 @@ def create_table():
     """
     Создает таблицы "employers" и "vacancies" в базе данных PostgreSQL.
     """
-    conn = psycopg2.connect(host="localhost", database="coursework_27_02",
-                            user="postgres", password="rewty76")
+    conn = psycopg2.connect(host=os.environ.get('DB_HOST'),
+                            database=os.environ.get('DB_NAME'),
+                            user=os.environ.get('DB_USERNAME'),
+                            password=os.environ.get('DB_PASSWORD'))
     conn.autocommit = True
     cur = conn.cursor()
 
@@ -65,8 +68,10 @@ def create_table():
 
     conn.close()
 
-    conn = psycopg2.connect(host="localhost", database="coursework_27_02",
-                            user="postgres", password="rewty76")
+    conn = psycopg2.connect(host=os.environ.get('DB_HOST'),
+                            database=os.environ.get('DB_NAME'),
+                            user=os.environ.get('DB_USERNAME'),
+                            password=os.environ.get('DB_PASSWORD'))
     with conn.cursor() as cur:
         cur.execute("""
                     CREATE TABLE employers (
@@ -94,8 +99,10 @@ def add_to_table(employers_list):
 
     :param employers_list: Список идентификаторов работодателей.
     """
-    with psycopg2.connect(host="localhost", database="coursework_27_02",
-                          user="postgres", password="rewty76") as conn:
+    with psycopg2.connect(host=os.environ.get('DB_HOST'),
+                          database=os.environ.get('DB_NAME'),
+                          user=os.environ.get('DB_USERNAME'),
+                          password=os.environ.get('DB_PASSWORD')) as conn:
         with conn.cursor() as cur:
             cur.execute('TRUNCATE TABLE employers, vacancies RESTART IDENTITY;')
 
